@@ -4,8 +4,8 @@ exec 1> $workdir/task4_1.out
 
 echo "--- Harware ---"
 
-cat /proc/cpuinfo | grep 'model name' -m 1 | awk -F: '{print "CPU:" $2}'
-cat /proc/meminfo | grep 'MemTotal' | awk '{print "RAM: " $2 "KB"}'
+echo "CPU:" $( cat /proc/cpuinfo | grep 'model name' -m 1 | awk -F: '{print $2}' )
+echo "RAM: " $( cat /proc/meminfo | grep 'MemTotal' | awk '{print $2 "KB"}' )
 
 matherbman=$( dmidecode -t 1 | grep 'Manufacturer' | awk -F: '{print $2}' )
 matherbpro=$( dmidecode -t 1 | grep 'Product Name' | awk -F: '{print $2}' )
@@ -21,7 +21,7 @@ cat /var/log/dpkg.log | awk 'NR==1{print "Installation date: " $1}'
 echo "Hostname:" $( hostname -f ) 
 echo "Uptime:" $( uptime -p | awk -F "up |" '{print $2}' )
 echo "Processes running:" $( ps -A | wc -l )
-echo "User logged in:" $( who | wc -l )
+echo "User logged in:" $( who --count | grep users | awk -F= '{print $2}' )
 
 echo "--- Network ---" 
 for iface in $(ifconfig | cut -d ' ' -f1| tr "\n" ' ') 
